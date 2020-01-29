@@ -1,7 +1,7 @@
 from setuptools import setup
 
 PACKAGE = 'heroku-cli-wrapper'
-VERSION = '0.1'
+VERSION = '0.0.1'
 
 setup(
     name=PACKAGE,
