@@ -71,6 +71,13 @@ class HerokuCLIWrapper:
             print(f'Unable to restore reference database to created app in {max_attempts} attempts')
             exit(1)
 
+    def copy_database(self, src_db_name: str, dst_app_name: str, dst_db_name: str, src_app_name: str = None):
+        cmd = f'heroku pg:copy {src_db_name} {dst_db_name} --app {dst_app_name} --confirm {dst_app_name}'
+        if src_app_name:
+            cmd = f'heroku pg:copy {src_app_name}::{src_db_name} {dst_db_name} --app {dst_app_name} --confirm {dst_app_name}'
+        call_cmd(cmd)
+
+
     def get_env_vars(self, app_name: str):
         print(f'Get environment variables from app: {app_name}')
         cmd = f'heroku config -a {app_name} --json'
