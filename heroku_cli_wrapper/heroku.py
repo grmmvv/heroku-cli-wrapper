@@ -2,8 +2,7 @@ import json
 import logging
 import os
 
-from src.helper import call_cmd
-
+from heroku_cli_wrapper.helper import call_cmd
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
 

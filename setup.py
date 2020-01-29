@@ -7,7 +7,7 @@ setup(
     name=PACKAGE,
     version=VERSION,
     packages=['heroku_cli_wrapper'],
-    package_dir={'heroku_cli_wrapper': 'src'},
+    package_dir={'heroku_cli_wrapper': 'heroku_cli_wrapper'},
     url='https://github.com/grmmvv/heroku-cli-wrapper',
     author='Max Gribennikov',
     author_email='grmmvv@gmail.com',
