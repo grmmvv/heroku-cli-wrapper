@@ -21,11 +21,12 @@ class HerokuCLIWrapper:
         except SystemExit:
             self._install__heroku_cli()
         self.app_name = app_name
-        try:
-            self.get_info()
-        except SystemExit:
-            logging.error(f'Unable to find app with name: "{self.app_name}"')
-            exit(1)
+        if self.app_name:
+            try:
+                self.get_info()
+            except SystemExit:
+                logging.error(f'Unable to find app with name: "{self.app_name}"')
+                exit(1)
 
     @staticmethod
     def _install__heroku_cli():
