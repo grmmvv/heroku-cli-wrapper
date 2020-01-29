@@ -105,7 +105,7 @@ class HerokuCLIWrapper:
         return r
 
     def set_remote(self):
-        logging.info(f'Add heroku hemote for app: {self.app_name}')
+        logging.info(f'Add heroku remote for app: {self.app_name}')
         cmd = f'heroku git:remote -a {self.app_name}'
         r = call_cmd(cmd)
         return r
