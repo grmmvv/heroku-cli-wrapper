@@ -4,7 +4,6 @@ import subprocess
 
 
 def call_cmd(cmd: str):
-    print(f'Calling: {cmd}')
     response = subprocess.run(cmd, shell=True, capture_output=True, universal_newlines=True)
     if response.returncode != 0:
         print(f'Command "{cmd}" returned non-zero exit status {response.returncode}.')
