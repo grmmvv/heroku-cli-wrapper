@@ -18,7 +18,7 @@ class HerokuCLIWrapper:
         try:
             call_cmd('heroku --version')
         except SystemExit:
-            self._install__heroku_cli()
+            self._install_heroku_cli()
         self.app_name = app_name
         if self.app_name:
             try:
@@ -28,7 +28,7 @@ class HerokuCLIWrapper:
                 exit(1)
 
     @staticmethod
-    def _install__heroku_cli():
+    def _install_heroku_cli():
         logging.info('Install Heroku CLI')
         call_cmd('curl https://cli-assets.heroku.com/install.sh | sh')
 
@@ -57,14 +57,12 @@ class HerokuCLIWrapper:
         logging.info(f'Get addons list from app: {self.app_name}')
         cmd = f'heroku addons -a {self.app_name} --json'
         r = call_cmd(cmd)
-        data = json.loads(r.stdout)
-        return data
+        return json.loads(r.stdout)
 
     def create_addon(self, addon):
         logging.info(f'Create addon: {addon} in app: {self.app_name}')
         cmd = f'heroku addons:create {addon} -a {self.app_name} --wait --json'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
 
     def restore_backup_from_url(self, source_url: str):
         logging.info(f'Restore DB backup from: {source_url} to app {self.app_name}')
@@ -92,8 +90,7 @@ class HerokuCLIWrapper:
         logging.info(f'Get environment variables from app: {self.app_name}')
         cmd = f'heroku config -a {self.app_name} --json'
         r = call_cmd(cmd)
-        data = json.loads(r.stdout)
-        return data
+        return json.loads(r.stdout)
 
     def set_env_vars(self, env_vars_dict: dict):
         logging.info(f'Set environment variables for app: {self.app_name}')
@@ -101,28 +98,30 @@ class HerokuCLIWrapper:
         for k, v in env_vars_dict.items():
             addons_data += f'{k}="{v}" '
         cmd = f'heroku config:set -a {self.app_name} {addons_data}'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
 
     def set_remote(self):
         logging.info(f'Add heroku remote for app: {self.app_name}')
         cmd = f'heroku git:remote -a {self.app_name}'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
 
     def add_buildpack(self, buildpack_url: str):
         logging.info(f'Add buildpack: {buildpack_url} to app: {self.app_name}')
         cmd = f'heroku buildpacks:add {buildpack_url} -a {self.app_name}'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
 
     def scale_app_dynos(self, dyno_dict: dict):
         dynos_data = ' '.join(f'{k}={v}' for k, v in dyno_dict.items())
         cmd = f'heroku ps:scale -a {self.app_name} {dynos_data}'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
 
     def restart_app(self):
         cmd = f'heroku ps:restart -a {self.app_name}'
-        r = call_cmd(cmd)
-        return r
+        return call_cmd(cmd)
+
+    def get_release_info(self, release_ver=None):
+        if not release_ver:
+            cmd = f'heroku releases:info -a {self.app_name} --json'
+        else:
+            cmd = f'heroku releases:info {release_ver} -a {self.app_name} --json'
+        return json.loads(call_cmd(cmd).stdout)
